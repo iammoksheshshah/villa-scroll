@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --surface-base: #0a0a0a;
+  --surface-raised: #141414;
+  --ink: #f5f5f4;
+  --line: rgba(255, 255, 255, 0.1);
+  --success: #a7f3d0;
+  --danger: #fca5a5;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-base: #f5f2ea;
+  --surface-raised: #ffffff;
+  --ink: #1c1a17;
+  --line: rgba(28, 26, 23, 0.15);
+  --success: #15803d;
+  --danger: #b91c1c;
+  --background: #f5f2ea;
+  --foreground: #1c1a17;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-base: var(--surface-base);
+  --color-surface: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+}
+
+html {
+  background: var(--surface-base);
+}
+
+body {
+  background: var(--surface-base);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+/* Editorial sections carry a soft pool of light instead of a flat fill. */
+.ambient-glow {
+  background-image: radial-gradient(
+    58% 46% at 78% 0%,
+    color-mix(in oklab, var(--ink) 7%, transparent),
+    transparent 68%
+  );
+}
+
+.depth-stage {
+  perspective: 1600px;
+  perspective-origin: 50% 30%;
+}
+
+/* Pointer-driven glare painted inside the tilt cards. */
+.tilt-glare {
+  background: radial-gradient(
+    14rem circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.18),
+    transparent 62%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.tilt-card:hover .tilt-glare,
+.tilt-card:focus-within .tilt-glare {
+  opacity: 1;
+}
+
+@keyframes marquee-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  animation: marquee-drift 44s linear infinite;
+  will-change: transform;
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+::selection {
+  background: color-mix(in oklab, var(--ink) 85%, transparent);
+  color: var(--surface-base);
+}
+
+:focus-visible {
+  outline: 1px solid color-mix(in oklab, var(--ink) 70%, transparent);
+  outline-offset: 3px;
+}
+
+@keyframes scroll-indicator {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0);
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 2.75rem);
+  }
+}
+
+.scroll-indicator-dot {
+  animation: scroll-indicator 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator-dot {
+    animation: none;
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+/* Site header: white over the dark hero, theme-aware once the glass appears. */
+.site-header {
+  --header-fg: #ffffff;
+  --header-fg-muted: rgba(255, 255, 255, 0.55);
+  --header-bg: rgba(10, 10, 10, 0.55);
+  --header-border: rgba(255, 255, 255, 0.06);
+  --header-control-bg: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .site-header[data-scrolled="true"],
+[data-theme="light"] .site-header[data-menu-open="true"] {
+  --header-fg: #1c1a17;
+  --header-fg-muted: rgba(28, 26, 23, 0.6);
+  --header-bg: rgba(245, 242, 234, 0.8);
+  --header-border: rgba(28, 26, 23, 0.08);
+  --header-control-bg: rgba(28, 26, 23, 0.06);
+}
+
+.header-brand {
+  color: var(--header-fg);
+}
+
+.header-link {
+  color: var(--header-fg-muted);
+}
+
+.header-link:hover,
+.header-link:focus-visible {
+  color: var(--header-fg);
+}
+
+.header-backdrop {
+  background: var(--header-bg);
+  border-color: var(--header-border);
+}
+
+.theme-toggle {
+  color: var(--header-fg);
+  background: var(--header-control-bg);
+  border-color: var(--header-border);
+}
+
+.theme-icon-dark {
+  display: block;
+}
+
+.theme-icon-light {
+  display: none;
+}
+
+[data-theme="light"] .theme-icon-dark {
+  display: none;
+}
+
+[data-theme="light"] .theme-icon-light {
+  display: block;
+}
+
+.contact-card {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .contact-card {
+  box-shadow: 0 24px 60px rgba(28, 26, 23, 0.1);
+}
+
+.vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 45%,
+    rgba(0, 0, 0, 0.22) 75%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+
+[data-theme="light"] .vignette {
+  opacity: 0.2;
+}
+
+[data-theme="light"] .film-grain {
+  opacity: 0.045;
+}
+
+@media (pointer: fine) {
+  .custom-cursor-active,
+  .custom-cursor-active * {
+    cursor: none !important;
+  }
+}
